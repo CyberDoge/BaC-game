@@ -1,0 +1,89 @@
+.navbar {
+    background: #F97300;
+}
+
+.nav-link, .navbar-brand {
+    color: #f4f4f4;
+    cursor: pointer;
+}
+
+.nav-link {
+    margin-right: 1em !important;
+}
+
+.nav-link:hover {
+    background: #f4f4f4;
+    color: #f97300;
+}
+
+.navbar-toggler {
+    background: #fff !important;
+}
+
+body {
+    background-color: ghostwhite;
+    text-align: center;
+}
+
+.line {
+    float: left;
+    padding: 5em 50px;
+}
+
+.attempts{
+    overflow-y: auto;
+    text-align: left;
+    font-size: 1.8em;
+    height: 300px;
+    width: 240px;
+
+}
+
+.manga img{
+    padding: 10px;
+    height: 50px;
+}
+main {
+    display: inline-block;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+table {
+    background-color: honeydew;
+}
+
+.field {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;         font-size: 2em;
+    height: 1.5em;
+    width: 3em;
+    border-bottom: 3px solid gray;
+}
+
+.number {
+    display: table-cell;
+    color: #f4f4f4;
+    background-color: #F97300;
+    text-align: center;
+    width: 1.5em;
+    height: 1.5em;
+    font-size: 2em;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+.number:hover {
+    color: #F97300;
+    background-color: #f4f4f4;
+}
+
+ul {
+    list-style-type: none;
+}
+

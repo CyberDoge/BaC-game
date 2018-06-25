@@ -1,0 +1,57 @@
+.navbar {
+    background: #F97300;
+}
+
+.nav-link, .navbar-brand {
+    color: #f4f4f4;
+    cursor: pointer;
+}
+
+.nav-link {
+    margin-right: 1em !important;
+}
+
+.nav-link:hover {
+    background: #f4f4f4;
+    color: #f97300;
+}
+
+.navbar-toggler {
+    background: #fff !important;
+}
+
+main {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background: rgba(244, 244, 244, 0.79);
+}
+
+.overlay {
+    text-align: center;
+    min-width: 100%;
+    left: 0;
+    top: 0;
+}
+
+table {
+    text-align: center;
+    margin: 100px auto;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+td{
+    border-left: 1px solid black;
+}
+
+tr:last-child{
+    border-bottom: 1px solid black;
+}

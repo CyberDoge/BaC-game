@@ -1,0 +1,61 @@
+.navbar {
+    background: #F97300;
+}
+
+.nav-link, .navbar-brand {
+    color: #f4f4f4;
+    cursor: pointer;
+}
+
+.nav-link {
+    margin-right: 1em !important;
+}
+
+.nav-link:hover {
+    background: #f4f4f4;
+    color: #f97300;
+}
+
+.navbar-toggler {
+    background: #fff !important;
+}
+
+main {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background: rgba(244, 244, 244, 0.79);
+}
+
+.overlay {
+    text-align: center;
+    min-width: 100%;
+    left: 0;
+    top: 0;
+}
+
+.description {
+    position: absolute;
+    top: 30%;
+}
+
+.description h3 {
+    color: #3AC1EF;
+}
+
+.description p {
+    color: #666;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.description button {
+    border: 1px solid #F97300;
+    background: #F97300;
+    color: #fff;
+}
