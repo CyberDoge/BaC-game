@@ -12,7 +12,7 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var session = req.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
+        if (session == null || session.getAttribute("username") == null) {
             req.setAttribute("auth", true);
         }
         req.getRequestDispatcher("WEB-INF/view/index.jsp").forward(req, resp);

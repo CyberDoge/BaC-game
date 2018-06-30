@@ -1,8 +1,8 @@
 package ru.game.servlet;
 
-import ru.game.entity.User;
-import ru.game.service.UserService;
-import ru.game.service.UserServiceImpl;
+import ru.game.repository.UserDao;
+import ru.game.repository.UserDaoImpl;
+import ru.game.validator.AuthValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,17 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-    private UserService userService;
-
-    @Override
-    public void init() throws ServletException {
-        userService = new UserServiceImpl();
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("logout") != null) {
@@ -33,30 +25,17 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //todo check request return null
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        var messages = new ArrayList<String>();
-        if (username == null || username.isEmpty()) {
-            messages.add("Please enter username");
-        }
-
-        if (password == null || password.isEmpty()) {
-            messages.add("Please enter password");
-        }
-
+        var messages = AuthValidator.validateLogin(username, password, (UserDao) getServletContext().getAttribute("userDao"));
         if (messages.isEmpty()) {
-            User user = userService.loginUser(username, password);
-            if (user != null) {
-                var session = request.getSession();
-                session.setAttribute("user", user);
-                session.setMaxInactiveInterval(60 * 60);
-                response.sendRedirect(request.getContextPath() + "user/home");
-                return;
-            } else {
-                messages.add("Invalid login or password. Please try again.");
-            }
+            var session = request.getSession();
+            session.setAttribute("username", username);
+            session.setMaxInactiveInterval(60 * 60);
+            response.sendRedirect(request.getContextPath() + "user/home");
+            return;
         }
-
         request.setAttribute("messages", messages);
         request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
     }

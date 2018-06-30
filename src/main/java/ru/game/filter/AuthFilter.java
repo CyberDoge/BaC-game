@@ -14,7 +14,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession(false);
-        if (( session == null || session.getAttribute("user")==null) || request.getParameter("logout") != null) {
+        if (( session == null || session.getAttribute("username")==null) || request.getParameter("logout") != null) {
             filterChain.doFilter(request, response);
         } else {
             response.sendRedirect("/");

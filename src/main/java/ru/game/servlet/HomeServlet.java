@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import ru.game.entity.User;
 import ru.game.service.StatisticService;
 import ru.game.service.StatisticServiceImpl;
-import ru.game.service.UserService;
-import ru.game.service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +23,7 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("username", ((User)(req.getSession(false).getAttribute("user"))).getUsername());
+        req.setAttribute("username", req.getSession(false).getAttribute("username"));
         getServletContext().getRequestDispatcher("/WEB-INF/view/user/home.jsp").forward(req, resp);
     }
 

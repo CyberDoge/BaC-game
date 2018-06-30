@@ -1,13 +1,10 @@
 package ru.game.repository;
 
-import ru.game.entity.Game;
 import ru.game.entity.User;
 import ru.game.util.DbUtil;
 import ru.game.util.PasswordCryptUtil;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class UserDaoImpl implements UserDao {

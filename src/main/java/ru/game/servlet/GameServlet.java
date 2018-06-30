@@ -1,7 +1,7 @@
 package ru.game.servlet;
 
 import com.google.gson.Gson;
-import ru.game.entity.User;
+import ru.game.repository.UserDao;
 import ru.game.service.GameService;
 import ru.game.service.GameServiceImpl;
 
@@ -15,12 +15,12 @@ import java.io.IOException;
 @WebServlet("/user/game")
 public class GameServlet extends HttpServlet {
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/view/user/game.jsp").forward(req, resp);
         var session = req.getSession(false);
-        var user = (User) (session.getAttribute("user"));
+        var user = ((UserDao) getServletContext().getAttribute("userDao"))
+                .findUserByUsername((String) session.getAttribute("username"));
         if (session.getAttribute("gameService") == null) {
             var gameService = new GameServiceImpl();
             session.setAttribute("gameService", gameService);
@@ -36,9 +36,9 @@ public class GameServlet extends HttpServlet {
         var json = "";
         var gameService = (GameService) (session.getAttribute("gameService"));
         try {
-            var  response = gameService.createResponse(text);
+            var response = gameService.createResponse(text);
             json = gson.toJson(response);
-            if(response.isEnd()) session.setAttribute("gameService", null);
+            if (response.isEnd()) session.setAttribute("gameService", null);
         } catch (NumberFormatException e) {
             json = gson.toJson(e);
         }

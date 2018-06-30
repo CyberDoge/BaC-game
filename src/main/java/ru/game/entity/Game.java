@@ -11,7 +11,7 @@ public class Game {
     public Game(int gameId, int secretNum) {
         list = new ArrayList<>();
         this.gameId = gameId;
-        this.secretNum = secretNum + "";
+        this.secretNum = String.valueOf(secretNum);
     }
 
     public void insertAttempt(int attempt, Date date) {
@@ -36,9 +36,9 @@ public class Game {
 
     public Game() {
         leave = true;
-        secretNum = (int) (Math.random() * 10000) + "";
+        secretNum = String.valueOf((int) (Math.random() * 10000));
         for (int i = secretNum.length(); i !=  4; i++)
-            secretNum = "0" + secretNum;
+            secretNum = "0".concat(secretNum);
         System.out.println("secretNum " + secretNum);
     }
 
