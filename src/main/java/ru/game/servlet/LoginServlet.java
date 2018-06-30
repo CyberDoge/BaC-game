@@ -1,7 +1,6 @@
 package ru.game.servlet;
 
 import ru.game.repository.UserDao;
-import ru.game.repository.UserDaoImpl;
 import ru.game.validator.AuthValidator;
 
 import javax.servlet.ServletException;
