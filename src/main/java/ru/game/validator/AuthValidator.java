@@ -1,6 +1,6 @@
 package ru.game.validator;
 
-import ru.game.repository.UserDao;
+import ru.game.dao.UserDao;
 import ru.game.util.PasswordCryptUtil;
 
 import java.util.ArrayList;

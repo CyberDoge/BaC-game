@@ -1,7 +1,7 @@
 package ru.game.servlet;
 
 import com.google.gson.Gson;
-import ru.game.entity.User;
+import ru.game.dao.UserDao;
 import ru.game.service.StatisticService;
 import ru.game.service.StatisticServiceImpl;
 
@@ -30,7 +30,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var session = req.getSession(false);
-        var user = ((User) session.getAttribute("user"));
+        var user = ((UserDao) getServletContext().getAttribute("userDao")).findUserByUsername((String) session.getAttribute("username"));
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         var json = new Gson().toJson(statisticService.getUserGames(user.getUserId()));

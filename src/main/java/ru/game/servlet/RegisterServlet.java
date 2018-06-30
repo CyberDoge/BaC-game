@@ -1,6 +1,6 @@
 package ru.game.servlet;
 
-import ru.game.repository.UserDao;
+import ru.game.dao.UserDao;
 import ru.game.validator.AuthValidator;
 
 import javax.servlet.ServletException;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/sign_up"})
-public class RegServlet extends HttpServlet {
+public class RegisterServlet extends HttpServlet {
        @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("WEB-INF/view/sign_up.jsp").forward(req, resp);

@@ -1,7 +1,8 @@
 package ru.game.servlet;
 
 import com.google.gson.Gson;
-import ru.game.repository.UserDao;
+import ru.game.dao.GameDao;
+import ru.game.dao.UserDao;
 import ru.game.service.GameService;
 import ru.game.service.GameServiceImpl;
 
@@ -24,7 +25,7 @@ public class GameServlet extends HttpServlet {
         if (session.getAttribute("gameService") == null) {
             var gameService = new GameServiceImpl();
             session.setAttribute("gameService", gameService);
-            gameService.createGame(user.getUserId());
+            gameService.createGame(user.getUserId(), ((GameDao) getServletContext().getAttribute("gameDao")));
         }
     }
 
@@ -36,7 +37,7 @@ public class GameServlet extends HttpServlet {
         var json = "";
         var gameService = (GameService) (session.getAttribute("gameService"));
         try {
-            var response = gameService.createResponse(text);
+            var response = gameService.createResponse(text, ((GameDao) getServletContext().getAttribute("gameDao")));
             json = gson.toJson(response);
             if (response.isEnd()) session.setAttribute("gameService", null);
         } catch (NumberFormatException e) {

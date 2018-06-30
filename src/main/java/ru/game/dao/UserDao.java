@@ -1,26 +1,24 @@
-package ru.game.repository;
+package ru.game.dao;
 
 import ru.game.entity.User;
 import ru.game.util.DbUtil;
 import ru.game.util.PasswordCryptUtil;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class UserDao {
-    private Connection connection;
 
-    public UserDao() {
-        connection = DbUtil.getConnection();
-    }
+    private static final String USER_BY_USERNAME_QUERY = "SELECT * FROM user WHERE username=?";
+
+    private static final String CREATE_USER = "INSERT INTO user (username, password)  VALUES(?, ?);";
 
     public User findUserByUsername(String username) {
         User user = null;
-        PreparedStatement preparedStatement = null;
         ResultSet result = null;
-        try {
-            connection = DbUtil.getConnection();
-            preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE username=?;");
+        try (var preparedStatement = DbUtil.getConnection().prepareStatement(USER_BY_USERNAME_QUERY)) {
             preparedStatement.setString(1, username);
             result = preparedStatement.executeQuery();
             if (!result.next()) return null;
@@ -28,17 +26,18 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            close(preparedStatement, result);
+            try {
+                if (result != null) result.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return user;
     }
 
     public User createUser(String username, String password) {
-        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        try {
-            preparedStatement = connection.prepareStatement("INSERT INTO user (username, password)  VALUES(?, ?);",
-                    Statement.RETURN_GENERATED_KEYS);
+        try (var preparedStatement = DbUtil.getConnection().prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, username);
             password = PasswordCryptUtil.hashPassword(password);
             preparedStatement.setString(2, password);
@@ -50,17 +49,12 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            close(preparedStatement, resultSet);
+            try {
+                if (resultSet != null) resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
-    }
-
-    private void close(PreparedStatement preparedStatement, ResultSet resultSet) {
-        try {
-            if (preparedStatement != null) preparedStatement.close();
-            if (resultSet != null) resultSet.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
