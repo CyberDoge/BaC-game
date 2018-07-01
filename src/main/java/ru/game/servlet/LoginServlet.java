@@ -63,12 +63,7 @@ public class LoginServlet extends HttpServlet {
         }
         var messages = AuthValidator.validateLogin(username, password, (UserDao) getServletContext().getAttribute("userDao"));
         if (messages.isEmpty()) {
-            if (rememberMe != null && !rememberMe.isEmpty()) {
-                var usernameCookie = new Cookie("username", username);
-                var tokenCookie = new Cookie("token", userService.saveCookies(username));
-                response.addCookie(usernameCookie);
-                response.addCookie(tokenCookie);
-            }
+            userService.sendCookies(rememberMe, response, username);
             auth(request, response, username);
             return;
         }

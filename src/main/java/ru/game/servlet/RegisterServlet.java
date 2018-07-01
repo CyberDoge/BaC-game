@@ -7,6 +7,7 @@ import ru.game.validator.AuthValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,7 @@ public class RegisterServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String confirm = req.getParameter("confirm_password");
+        String rememberMe = req.getParameter("remember");
         if (username == null || password == null || confirm == null) {
             req.setAttribute("messages", "You try to send null");
             req.getRequestDispatcher("/WEB-INF/view/sign_up.jsp").forward(req, resp);
@@ -42,6 +44,7 @@ public class RegisterServlet extends HttpServlet {
         }
         var messages = AuthValidator.validateRegistration(username, password, confirm, (UserDao) getServletContext().getAttribute("userDao"));
         if (messages.isEmpty()) {
+            userService.sendCookies(rememberMe, resp, username);
             userService.registerUser(username, password);
             req.getSession().setAttribute("username", username);
             resp.sendRedirect(req.getContextPath() + "user/home");

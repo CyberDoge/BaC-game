@@ -44,6 +44,12 @@
                                placeholder="Confirm password">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="remember" class="col-md-3 control-label">remember me</label>
+                    <div class="col-md-9">
+                        <input id='remember' name='remember' type='checkbox' value='1'>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-3 col-md-9">

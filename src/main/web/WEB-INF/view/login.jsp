@@ -39,7 +39,7 @@
                         <input id="login-password" type="password" class="form-control" name="password"
                                placeholder="password">
                     </div>
-                    <div style="margin-top:10px" class="form-group">
+                    <div style="margin-top:10px" class="input-group">
                         <div class="col-sm-12 controls">
                             <label for="remember">remember me</label>
                             <input id='remember' name='remember' type='checkbox' value='1'>

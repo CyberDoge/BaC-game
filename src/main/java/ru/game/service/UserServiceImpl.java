@@ -5,6 +5,7 @@ import ru.game.util.PasswordCryptUtil;
 import ru.game.validator.AuthValidator;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -53,5 +54,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void invalidCookies(String username) {
         userDao.invalidCookieToken(username);
+    }
+
+    @Override
+    public void sendCookies(String rememberMe, HttpServletResponse resp, String username) {
+        if (rememberMe != null && !rememberMe.isEmpty()) {
+            var usernameCookie = new Cookie("username", username);
+            var tokenCookie = new Cookie("token", saveCookies(username));
+            resp.addCookie(usernameCookie);
+            resp.addCookie(tokenCookie);
+        }
     }
 }
