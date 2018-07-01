@@ -26,6 +26,13 @@ public final class AuthValidator {
         return result;
     }
 
+    public static boolean validateCookie(String usernameCookie, String tokenCookie, UserDao userDao) {
+        var user = userDao.findUserByUsername(usernameCookie);
+        if (user != null)
+            return user.getToken().equals(tokenCookie);
+        return false;
+    }
+
     public static List<String> validateRegistration(String username, String password, String confirm, UserDao userDao) {
         var result = new ArrayList<String>();
         if (username.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
@@ -46,9 +53,5 @@ public final class AuthValidator {
             }
         }
         return result;
-    }
-    public static void registerUser(String username, String password, UserDao userDao){
-        password = PasswordCryptUtil.hashPassword(password);
-        userDao.createUser(username, password);
     }
 }

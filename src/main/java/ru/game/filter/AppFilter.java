@@ -17,17 +17,10 @@ public class AppFilter implements Filter {
         String loginURI = request.getContextPath() + "/login";
 
         boolean loggedIn = session != null && session.getAttribute("username") != null;
-        boolean loginRequest = request.getRequestURI().equals(loginURI);
-        if (loggedIn && isAjax(request)) {
-            request.getRequestDispatcher(request.getServletPath()).forward(request, response);
-        } else if (loggedIn || loginRequest) {
+        if (loggedIn) {
             filterChain.doFilter(request, response);
         } else {
             response.sendRedirect(loginURI);
         }
-    }
-
-    public static boolean isAjax(HttpServletRequest request) {
-        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
     }
 }

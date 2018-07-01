@@ -31,10 +31,7 @@ public class GameDao {
     }
 
     public void saveAttempt(int gameId, int num, int attempt, Date date) {
-        try (
-                var connection = DbUtil.getConnection();
-                var statement = connection.prepareStatement(SAVE_ATTEMPT)
-        ) {
+        try (var statement = DbUtil.getConnection().prepareStatement(SAVE_ATTEMPT)) {
             statement.setInt(1, gameId);
             statement.setInt(2, num);
             statement.setInt(3, attempt);
@@ -46,10 +43,7 @@ public class GameDao {
     }
 
     public void finishGame(int gameId) {
-        try (
-                var connection = DbUtil.getConnection();
-                var statement = connection.prepareStatement(FINISH_GAME)
-        ) {
+        try (var statement =  DbUtil.getConnection().prepareStatement(FINISH_GAME)) {
             statement.setInt(1, gameId);
             statement.executeUpdate();
         } catch (SQLException e) {

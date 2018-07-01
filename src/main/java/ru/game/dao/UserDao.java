@@ -15,6 +15,8 @@ public class UserDao {
 
     private static final String CREATE_USER = "INSERT INTO user (username, password)  VALUES(?, ?);";
 
+    private static final String SAVE_COOKIES = "UPDATE user SET token=? where username =?";
+
     public User findUserByUsername(String username) {
         User user = null;
         ResultSet result = null;
@@ -33,6 +35,16 @@ public class UserDao {
             }
         }
         return user;
+    }
+
+    public void addCookieToken(String username, String token) {
+        try (var preparedStatement = DbUtil.getConnection().prepareStatement(SAVE_COOKIES)) {
+            preparedStatement.setString(1, token);
+            preparedStatement.setString(2, username);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public User createUser(String username, String password) {
