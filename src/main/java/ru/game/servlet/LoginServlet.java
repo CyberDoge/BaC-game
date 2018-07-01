@@ -33,6 +33,7 @@ public class LoginServlet extends HttpServlet {
             for (var c : cookies) {
                 c.setMaxAge(0);
             }
+            userService.invalidCookies((String) request.getSession(false).getAttribute("username"));
             request.getSession().invalidate();
             response.sendRedirect("/");
             return;
@@ -79,7 +80,7 @@ public class LoginServlet extends HttpServlet {
     private void auth(HttpServletRequest request, HttpServletResponse response, String username) throws IOException {
         var session = request.getSession();
         session.setAttribute("username", username);
-        session.setMaxInactiveInterval(60 * 60);
+        session.setMaxInactiveInterval(/*60 * 60*/ 5);
         response.sendRedirect(request.getContextPath() + "user/home");
     }
 }

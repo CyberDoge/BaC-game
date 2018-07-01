@@ -1,13 +1,13 @@
 package ru.game.service;
 
-import ru.game.entity.Game;
+import ru.game.entity.game.Game;
 import ru.game.dao.GameDao;
+import ru.game.entity.game.Response;
 
 import java.util.Date;
 
 public class GameServiceImpl implements GameService {
     private Game game;
-
 
     @Override
     public int createGame(int userId, GameDao gameDao) {
@@ -18,7 +18,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game.Response createResponse(String userAttempt, GameDao gameDao) throws NumberFormatException {
+    public Response createResponse(String userAttempt, GameDao gameDao) throws NumberFormatException {
         var result = game.newResponse(userAttempt);
         char[] m = userAttempt.toCharArray();
         for (int i = 0; i < m.length; i++) {
@@ -39,6 +39,7 @@ public class GameServiceImpl implements GameService {
     }
 
     private void endGame(GameDao gameDao) {
+        game.setLeave(false);
         gameDao.finishGame(game.getGameId());
     }
 }

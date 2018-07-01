@@ -1,4 +1,4 @@
-package ru.game.entity;
+package ru.game.entity.game;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,61 +66,5 @@ public class Game {
         return list;
     }
 
-    public class Response {
-        private boolean end = false;
-
-        public boolean isEnd() {
-            return end;
-        }
-
-        public void setEnd(boolean end) {
-            this.end = end;
-            setLeave(false);
-        }
-
-        private String text;
-        private String result;
-        private int bulls = 0;
-        private int cows = 0;
-
-        private Response(String text) {
-            this.text = text;
-        }
-
-        public void incrementBulls() {
-            bulls++;
-        }
-
-        public void setResult(String result) {
-            this.result = result;
-        }
-
-        public int getBulls() {
-            return bulls;
-        }
-
-        public int getCows() {
-            return cows;
-        }
-
-        public void incrementCows() {
-            cows++;
-        }
-    }
-
-    public class Attempt {
-        Date datetime;
-        int attempt;
-
-        public Attempt(int attempt, Date datetime) {
-            this.datetime = datetime;
-            this.attempt = attempt;
-        }
-
-        public Attempt(String attempt) throws NumberFormatException {
-            this.attempt = Integer.parseInt(attempt);
-            datetime = new Date();
-        }
-    }
 
 }

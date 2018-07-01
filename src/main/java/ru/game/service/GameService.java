@@ -1,10 +1,10 @@
 package ru.game.service;
 
-import ru.game.entity.Game;
 import ru.game.dao.GameDao;
+import ru.game.entity.game.Response;
 
 public interface GameService {
     int createGame(int userId, GameDao gameDao);
 
-    Game.Response createResponse(String text, GameDao gameDao);
+    Response createResponse(String text, GameDao gameDao);
 }

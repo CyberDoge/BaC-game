@@ -1,6 +1,6 @@
 package ru.game.dao;
 
-import ru.game.entity.Game;
+import ru.game.entity.game.Game;
 import ru.game.util.DbUtil;
 
 import java.sql.SQLException;

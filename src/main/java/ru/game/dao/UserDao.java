@@ -7,6 +7,7 @@ import ru.game.util.PasswordCryptUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 
 public class UserDao {
@@ -24,7 +25,7 @@ public class UserDao {
             preparedStatement.setString(1, username);
             result = preparedStatement.executeQuery();
             if (!result.next()) return null;
-            user = new User(result.getInt(1), result.getString(2), result.getString(3));
+            user = new User(result.getInt(1), result.getString(2), result.getString(3), result.getString(4));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -68,5 +69,15 @@ public class UserDao {
             }
         }
         return null;
+    }
+
+    public void invalidCookieToken(String username){
+        try (var preparedStatement = DbUtil.getConnection().prepareStatement(SAVE_COOKIES)) {
+            preparedStatement.setNull(1, Types.VARCHAR);
+            preparedStatement.setString(2, username);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

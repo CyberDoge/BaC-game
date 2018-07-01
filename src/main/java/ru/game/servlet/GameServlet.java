@@ -34,7 +34,7 @@ public class GameServlet extends HttpServlet {
         var gson = new Gson();
         var session = req.getSession(false);
         var text = gson.fromJson(req.getReader(), String.class);
-        var json = "";
+        String json;
         var gameService = (GameService) (session.getAttribute("gameService"));
         try {
             var response = gameService.createResponse(text, ((GameDao) getServletContext().getAttribute("gameDao")));

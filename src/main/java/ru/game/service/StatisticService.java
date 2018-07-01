@@ -1,6 +1,6 @@
 package ru.game.service;
 
-import ru.game.entity.Game;
+import ru.game.entity.game.Game;
 
 import java.util.List;
 import java.util.Map;
