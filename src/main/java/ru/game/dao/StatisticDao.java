@@ -3,6 +3,7 @@ package ru.game.dao;
 import ru.game.entity.game.Game;
 import ru.game.util.DbUtil;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -22,7 +23,8 @@ public class StatisticDao {
 
     public List<Game> getListGames(int userId) {
         var list = new ArrayList<Game>();
-        try (var statement = DbUtil.getConnection().prepareStatement(USER_GAMES_QUERY)) {
+        try (var con = DbUtil.getConnection();
+             PreparedStatement statement = con.prepareStatement(USER_GAMES_QUERY)) {
             statement.setInt(1, userId);
             var result = statement.executeQuery();
             var last = 0;
@@ -44,12 +46,14 @@ public class StatisticDao {
             public int compare(Object o1, Object o2) {
                 return 1;
             }
+
             public boolean equals(Object obj) {
                 return false;
             }
         };
         var result = new TreeMap<String, Double>(comparator);
-        try (var statement = DbUtil.getConnection().prepareStatement(RECORDS_QUERY)) {
+        try (var con = DbUtil.getConnection();
+             PreparedStatement statement = con.prepareStatement(RECORDS_QUERY)) {
             var resultSet = statement.executeQuery();
             while (resultSet.next())
                 result.put(resultSet.getString(1), resultSet.getDouble(2));

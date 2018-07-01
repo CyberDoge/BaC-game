@@ -4,10 +4,7 @@ import ru.game.entity.User;
 import ru.game.util.DbUtil;
 import ru.game.util.PasswordCryptUtil;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import java.sql.*;
 
 
 public class UserDao {
@@ -21,7 +18,8 @@ public class UserDao {
     public User findUserByUsername(String username) {
         User user = null;
         ResultSet result = null;
-        try (var preparedStatement = DbUtil.getConnection().prepareStatement(USER_BY_USERNAME_QUERY)) {
+        try (var con = DbUtil.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(USER_BY_USERNAME_QUERY)) {
             preparedStatement.setString(1, username);
             result = preparedStatement.executeQuery();
             if (!result.next()) return null;
@@ -39,7 +37,8 @@ public class UserDao {
     }
 
     public void addCookieToken(String username, String token) {
-        try (var preparedStatement = DbUtil.getConnection().prepareStatement(SAVE_COOKIES)) {
+        try (var con = DbUtil.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(SAVE_COOKIES)) {
             preparedStatement.setString(1, token);
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
@@ -50,7 +49,8 @@ public class UserDao {
 
     public User createUser(String username, String password) {
         ResultSet resultSet = null;
-        try (var preparedStatement = DbUtil.getConnection().prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = DbUtil.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, username);
             password = PasswordCryptUtil.hashPassword(password);
             preparedStatement.setString(2, password);
@@ -71,8 +71,9 @@ public class UserDao {
         return null;
     }
 
-    public void invalidCookieToken(String username){
-        try (var preparedStatement = DbUtil.getConnection().prepareStatement(SAVE_COOKIES)) {
+    public void invalidCookieToken(String username) {
+        try (var con = DbUtil.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(SAVE_COOKIES)) {
             preparedStatement.setNull(1, Types.VARCHAR);
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
