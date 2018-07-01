@@ -1,6 +1,7 @@
 package ru.game.listener;
 
 import ru.game.dao.GameDao;
+import ru.game.dao.StatisticDao;
 import ru.game.dao.UserDao;
 import ru.game.util.DbUtil;
 
@@ -15,6 +16,7 @@ public class AppContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         sce.getServletContext().setAttribute("userDao", new UserDao());
         sce.getServletContext().setAttribute("gameDao", new GameDao());
+        sce.getServletContext().setAttribute("statisticDao", new StatisticDao());
     }
 
     @Override

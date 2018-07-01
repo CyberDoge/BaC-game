@@ -2,10 +2,7 @@ package ru.game.dao;
 
 import ru.game.util.DbUtil;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Date;
 
 public class GameDao {
@@ -16,17 +13,24 @@ public class GameDao {
 
     public int createGame(int userId, int secretNum) {
         int id = -1;
+        ResultSet resultSet = null;
         try (var con = DbUtil.getConnection();
              PreparedStatement statement = con.prepareStatement(CREATE_GAME, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, userId);
             statement.setInt(2, secretNum);
             statement.executeUpdate();
-            var resultSet = statement.getGeneratedKeys();
+            resultSet = statement.getGeneratedKeys();
             resultSet.next();
             id = resultSet.getInt(1);
             return id;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return id;
     }

@@ -9,8 +9,8 @@ import java.util.Map;
 public class StatisticServiceImpl implements StatisticService {
     private StatisticDao statisticDao;
 
-    public StatisticServiceImpl() {
-        statisticDao = new StatisticDao();
+    public StatisticServiceImpl(StatisticDao statisticDao) {
+        this.statisticDao = statisticDao;
     }
 
     @Override

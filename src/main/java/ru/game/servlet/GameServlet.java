@@ -20,8 +20,16 @@ public class GameServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/view/user/game.jsp").forward(req, resp);
         var session = req.getSession(false);
-        var user = ((UserDao) getServletContext().getAttribute("userDao"))
-                .findUserByUsername((String) session.getAttribute("username"));
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            session.invalidate();
+            return;
+        }
+        var user = ((UserDao) getServletContext().getAttribute("userDao")).findUserByUsername(username);
+        if (user == null) {
+            session.invalidate();
+            return;
+        }
         if (session.getAttribute("gameService") == null) {
             var gameService = new GameServiceImpl();
             session.setAttribute("gameService", gameService);

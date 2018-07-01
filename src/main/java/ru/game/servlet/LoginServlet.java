@@ -75,7 +75,7 @@ public class LoginServlet extends HttpServlet {
     private void auth(HttpServletRequest request, HttpServletResponse response, String username) throws IOException {
         var session = request.getSession();
         session.setAttribute("username", username);
-        session.setMaxInactiveInterval(/*60 * 60*/ 5);
+        session.setMaxInactiveInterval(60 * 60);
         response.sendRedirect(request.getContextPath() + "user/home");
     }
 }

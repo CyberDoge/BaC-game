@@ -1,5 +1,6 @@
 package ru.game.servlet;
 
+import ru.game.dao.StatisticDao;
 import ru.game.service.StatisticService;
 import ru.game.service.StatisticServiceImpl;
 
@@ -12,11 +13,15 @@ import java.io.IOException;
 
 @WebServlet("/records")
 public class RecordServlet extends HttpServlet {
-    private StatisticService service;
+    private StatisticService statisticService;
 
     @Override
-    public void init() throws ServletException {
-        service = new StatisticServiceImpl();
+    public void init() {
+        statisticService = (StatisticService) getServletContext().getAttribute("statisticService");
+        if (statisticService == null) {
+            statisticService = new StatisticServiceImpl((StatisticDao) getServletContext().getAttribute("statisticDao"));
+            getServletContext().setAttribute("statisticService", statisticService);
+        }
     }
 
     @Override
@@ -25,7 +30,7 @@ public class RecordServlet extends HttpServlet {
         if (session == null || session.getAttribute("username") == null) {
             req.setAttribute("auth", true);
         }
-        req.setAttribute("map", service.getRecord());
+        req.setAttribute("map", statisticService.getRecord());
         req.getRequestDispatcher("/WEB-INF/view/records.jsp").forward(req, resp);
     }
 }
