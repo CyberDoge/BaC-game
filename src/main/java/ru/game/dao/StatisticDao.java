@@ -1,5 +1,8 @@
 package ru.game.dao;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.game.entity.game.Game;
 import ru.game.util.DbUtil;
 
@@ -22,6 +25,9 @@ public class StatisticDao {
             "  inner join user u on g.user_id = u.user_id" +
             "  where leaved = 0  group by username order by avg";
 
+    private static final Logger LOGGER = LogManager.getLogger(StatisticDao.class.getName());
+
+
     public List<Game> getListGames(int userId) {
         ResultSet resultSet = null;
         var list = new ArrayList<Game>();
@@ -39,7 +45,7 @@ public class StatisticDao {
             }
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "Get list of game SQL-exception: ", e);
         } finally {
             try {
                 if (resultSet != null) resultSet.close();
@@ -64,13 +70,13 @@ public class StatisticDao {
         var result = new TreeMap<String, Double>(comparator);
         try (var con = DbUtil.getConnection();
              PreparedStatement statement = con.prepareStatement(RECORDS_QUERY)) {
-                resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next())
                 result.put(resultSet.getString(1), resultSet.getDouble(2));
             resultSet.close();
         } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
+            LOGGER.log(Level.ERROR, "Get records SQL-exception: ", e);
+        } finally {
             try {
                 if (resultSet != null) resultSet.close();
             } catch (SQLException e) {

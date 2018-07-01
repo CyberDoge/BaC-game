@@ -1,6 +1,9 @@
 package ru.game.servlet;
 
 import com.google.gson.Gson;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.game.dao.GameDao;
 import ru.game.dao.UserDao;
 import ru.game.service.GameService;
@@ -15,6 +18,8 @@ import java.io.IOException;
 
 @WebServlet("/user/game")
 public class GameServlet extends HttpServlet {
+
+    private static final Logger LOGGER = LogManager.getLogger(GameServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -42,14 +47,14 @@ public class GameServlet extends HttpServlet {
         var gson = new Gson();
         var session = req.getSession(false);
         var text = gson.fromJson(req.getReader(), String.class);
-        String json;
+        String json = null;
         var gameService = (GameService) (session.getAttribute("gameService"));
         try {
             var response = gameService.createResponse(text, ((GameDao) getServletContext().getAttribute("gameDao")));
             json = gson.toJson(response);
             if (response.isEnd()) session.setAttribute("gameService", null);
         } catch (NumberFormatException e) {
-            json = gson.toJson(e);
+            LOGGER.log(Level.WARN, "Trying to send not num: ", session.getAttribute("username"));
         }
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

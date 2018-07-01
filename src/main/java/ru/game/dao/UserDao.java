@@ -1,5 +1,8 @@
 package ru.game.dao;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.game.entity.User;
 import ru.game.util.DbUtil;
 import ru.game.util.PasswordCryptUtil;
@@ -15,6 +18,8 @@ public class UserDao {
 
     private static final String SAVE_COOKIES = "UPDATE user SET token=? where username =?";
 
+    private static final Logger LOGGER = LogManager.getLogger(UserDao.class.getName());
+
     public User findUserByUsername(String username) {
         User user = null;
         ResultSet result = null;
@@ -25,7 +30,7 @@ public class UserDao {
             if (!result.next()) return null;
             user = new User(result.getInt(1), result.getString(2), result.getString(3), result.getString(4));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "Find user SQL-exception: ", e);
         } finally {
             try {
                 if (result != null) result.close();
@@ -43,7 +48,7 @@ public class UserDao {
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "Add cookie-token SQL-exception: ", e);
         }
     }
 
@@ -58,9 +63,10 @@ public class UserDao {
             resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             int id = resultSet.getInt(1);
+            LOGGER.log(Level.INFO, "Create new user: ", "id = " + id + "; username = " + username + ';');
             return new User(id, username, password);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "Creating user SQL-exception: ", e);
         } finally {
             try {
                 if (resultSet != null) resultSet.close();
@@ -78,7 +84,7 @@ public class UserDao {
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "Invalid cookie-token SQL-exception: ", e);
         }
     }
 }

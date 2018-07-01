@@ -1,5 +1,8 @@
 package ru.game.listener;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.game.dao.GameDao;
 import ru.game.dao.StatisticDao;
 import ru.game.dao.UserDao;
@@ -12,6 +15,9 @@ import java.sql.SQLException;
 
 @WebListener
 public class AppContextListener implements ServletContextListener {
+
+    private static final Logger LOGGER = LogManager.getLogger(AppContextListener.class.getName());
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         sce.getServletContext().setAttribute("userDao", new UserDao());
@@ -24,7 +30,7 @@ public class AppContextListener implements ServletContextListener {
         try {
             DbUtil.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "Closing pool SQL-exception: ", e);
         }
     }
 }
