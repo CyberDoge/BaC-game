@@ -1,7 +1,6 @@
 package ru.game.servlet;
 
 import com.google.gson.Gson;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.game.dao.GameDao;
@@ -54,7 +53,7 @@ public class GameServlet extends HttpServlet {
             json = gson.toJson(response);
             if (response.isEnd()) session.setAttribute("gameService", null);
         } catch (NumberFormatException e) {
-            LOGGER.log(Level.WARN, "Trying to send not num: ", session.getAttribute("username"));
+            LOGGER.warn("Trying to send not num: ", session.getAttribute("username"));
         }
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

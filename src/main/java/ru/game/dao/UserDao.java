@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.game.entity.User;
 import ru.game.util.DbUtil;
-import ru.game.util.PasswordCryptUtil;
 
 import java.sql.*;
 
@@ -30,7 +29,7 @@ public class UserDao {
             if (!result.next()) return null;
             user = new User(result.getInt(1), result.getString(2), result.getString(3), result.getString(4));
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR, "Find user SQL-exception: ", e);
+            LOGGER.error("Find user SQL-exception: ", e);
         } finally {
             try {
                 if (result != null) result.close();
@@ -48,7 +47,7 @@ public class UserDao {
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR, "Add cookie-token SQL-exception: ", e);
+            LOGGER.error("Add cookie-token SQL-exception: ", e);
         }
     }
 
@@ -57,7 +56,6 @@ public class UserDao {
         try (var con = DbUtil.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, username);
-            password = PasswordCryptUtil.hashPassword(password);
             preparedStatement.setString(2, password);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
@@ -84,7 +82,7 @@ public class UserDao {
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR, "Invalid cookie-token SQL-exception: ", e);
+            LOGGER.error( "Invalid cookie-token SQL-exception: ", e);
         }
     }
 }

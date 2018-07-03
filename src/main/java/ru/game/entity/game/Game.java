@@ -37,7 +37,7 @@ public class Game {
     public Game() {
         leave = true;
         secretNum = String.valueOf((int) (Math.random() * 10000));
-        for (int i = secretNum.length(); i !=  4; i++)
+        for (int i = secretNum.length(); i != 4; i++)
             secretNum = "0".concat(secretNum);
         System.out.println("secretNum " + secretNum);
     }
