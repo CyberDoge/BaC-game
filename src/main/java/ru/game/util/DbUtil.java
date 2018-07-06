@@ -12,7 +12,7 @@ public class DbUtil {
 
     private static final BasicDataSource dataSource = new BasicDataSource();
 
-    static {
+    public static void init() {
         try {
             Properties prop = new Properties();
             InputStream inputStream = DbUtil.class.getClassLoader().getResourceAsStream("/db.properties");

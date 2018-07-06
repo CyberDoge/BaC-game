@@ -15,7 +15,7 @@ public class UserDao {
 
     private static final String CREATE_USER = "INSERT INTO user (username, password)  VALUES(?, ?);";
 
-    private static final String SAVE_COOKIES = "UPDATE user SET token=? where username =?";
+    private static final String SAVE_COOKIES = "UPDATE user SET token=? where username=?";
 
     private static final Logger LOGGER = LogManager.getLogger(UserDao.class.getName());
 

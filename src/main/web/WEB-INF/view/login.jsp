@@ -39,13 +39,13 @@
                         <input id="login-password" type="password" class="form-control" name="password"
                                placeholder="password">
                     </div>
-                    <div style="margin-top:10px" class="input-group">
+                    <div style="margin-top:10px" class="form-group">
                         <div class="col-sm-12 controls">
-                            <label for="remember">remember me</label>
-                            <input id='remember' name='remember' type='checkbox' value='1'>
+                            <label>
+                                <input id="remember" type="checkbox" name="remember" value="1"> Remember me
+                            </label>
                         </div>
                     </div>
-
                     <div style="margin-top:10px" class="form-group">
                         <div class="col-sm-12 controls">
                             <input type="submit" id="btn-login" class="btn btn-success" value="Login">
