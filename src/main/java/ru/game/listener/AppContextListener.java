@@ -10,6 +10,7 @@ import ru.game.util.DbUtil;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.io.IOException;
 import java.sql.SQLException;
 
 @WebListener
@@ -22,7 +23,13 @@ public class AppContextListener implements ServletContextListener {
         sce.getServletContext().setAttribute("userDao", new UserDao());
         sce.getServletContext().setAttribute("gameDao", new GameDao());
         sce.getServletContext().setAttribute("statisticDao", new StatisticDao());
-        DbUtil.init();
+        try {
+            DbUtil.init("/db.properties");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Driver is not found: ".concat(e.getMessage()));
+        } catch (IOException e) {
+            System.err.println("Error open property file: ".concat(e.getMessage()));
+        }
     }
 
     @Override
