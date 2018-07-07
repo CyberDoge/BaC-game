@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DataBaseTest {
     private Connection connection;
-/*
+
     @BeforeAll
     public void init() {
         try {
@@ -20,11 +20,14 @@ public class DataBaseTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("init");
-    }*/
+    }
 
     @Test
     public void test() {
-        assertEquals(1, 3, "norm");
+        try {
+            connection.prepareStatement("SELECT * FROM user");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
