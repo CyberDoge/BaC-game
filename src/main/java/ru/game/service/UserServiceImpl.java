@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(String username, String password) {
+        assert password != null && !password.isEmpty();
         password = PasswordCryptUtil.hashPassword(password);
         userDao.createUser(username, password);
     }

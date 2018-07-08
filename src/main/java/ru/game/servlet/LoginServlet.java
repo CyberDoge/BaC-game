@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
             return;
         }
-        var messages = AuthValidator.validateLogin(username, password, (UserDao) getServletContext().getAttribute("userDao"));
+        var messages = AuthValidator.validateLogin(username, password, (UserDaoImpl) getServletContext().getAttribute("userDao"));
         if (messages.isEmpty()) {
             userService.sendCookies(rememberMe, response, username);
             auth(request, response, username);
