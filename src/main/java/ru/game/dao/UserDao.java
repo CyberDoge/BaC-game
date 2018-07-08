@@ -82,7 +82,7 @@ public class UserDao {
             preparedStatement.setString(2, username);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.error( "Invalid cookie-token SQL-exception: ", e);
+            LOGGER.error("Invalid cookie-token SQL-exception: ", e);
         }
     }
 }

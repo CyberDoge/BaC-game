@@ -1,29 +1,39 @@
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import ru.game.dao.UserDao;
 import ru.game.util.DbUtil;
 
 import java.io.File;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DataBaseTest {
-    private UserDao userDao;
-
-    @BeforeEach
-    @DisplayName("init database")
-    void init() {
+    private static final String CLEAR_TABLE = "truncate user";
+    @BeforeAll
+    static void clearTable() {
         File file = new File("src/test/resources/db-test.properties");
-        assertDoesNotThrow(() -> DbUtil.init(file.getAbsolutePath()));
-        userDao = new UserDao();
+        assertDoesNotThrow(() -> DbUtil.init(file));
+        try (var con = DbUtil.getConnection();
+             var s = con.prepareStatement(CLEAR_TABLE)) {
+            s.execute();
+        } catch (SQLException e) {
+            assertEquals("", e);
+            System.exit(-1);
+        }
+
     }
 
     @Test
     void simpleInsert() {
+        var userDao = new UserDao();
         assertNotNull(userDao.createUser("NormalTest1", "unhashed password"));
     }
 
     @Test
     void nameEq40length() {
+        var userDao = new UserDao();
         StringBuilder longName = new StringBuilder();
         for (int i = 0; i < 40; i++) {
             longName.append('a');
@@ -33,6 +43,7 @@ class DataBaseTest {
 
     @Test
     void nameMore40length() {
+        var userDao = new UserDao();
         StringBuilder longName = new StringBuilder();
         for (int i = 0; i < 41 + (int) (Math.random() * 20); i++) {
             longName.append('b');
@@ -42,6 +53,7 @@ class DataBaseTest {
 
     @Test
     void passEq60length() {
+        var userDao = new UserDao();
         StringBuilder longPass = new StringBuilder();
         for (int i = 0; i < 60; i++) {
             longPass.append('c');
@@ -52,6 +64,8 @@ class DataBaseTest {
 
     @Test
     void passMore60length() {
+        var userDao = new UserDao();
+
         StringBuilder longPass = new StringBuilder();
         for (int i = 0; i < 61 + (int) (Math.random() * 20); i++) {
             longPass.append('a');
@@ -61,18 +75,24 @@ class DataBaseTest {
 
     @Test
     void addUsersWithEqlNames() {
+        var userDao = new UserDao();
+
         userDao.createUser("username", "password");
         assertNull(userDao.createUser("username", "123"));
     }
 
     @Test
     void addUsersWithEqlPass() {
+        var userDao = new UserDao();
+
         userDao.createUser("usernameEqPass", "password");
         assertNotNull(userDao.createUser("newUserEqPass", "password"));
     }
 
     @Test
     void addEqlUsers() {
+        var userDao = new UserDao();
+
         userDao.createUser("usernameEqUser", "password");
         assertNull(userDao.createUser("usernameEqUser", "password"));
     }
@@ -80,7 +100,12 @@ class DataBaseTest {
 
     @AfterAll
     static void close() {
-//        userDao = null;
+        try (var con = DbUtil.getConnection();
+             var s = con.prepareStatement(CLEAR_TABLE)) {
+            s.execute();
+        } catch (SQLException e) {
+            assertEquals("", e);
+        }
         assertDoesNotThrow(DbUtil::close);
     }
 }

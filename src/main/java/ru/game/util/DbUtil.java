@@ -12,9 +12,9 @@ public class DbUtil {
 
     private static final BasicDataSource dataSource = new BasicDataSource();
 
-    public static void init(String propertiesName) throws IOException, ClassNotFoundException {
+    public static void init(File propertiesFile) throws IOException, ClassNotFoundException {
         Properties prop = new Properties();
-        Reader reader = new FileReader(new File(propertiesName));
+        Reader reader = new FileReader(propertiesFile);
         System.out.println("reader = " + reader );
         prop.load(reader);
         String driver = prop.getProperty("driver");
