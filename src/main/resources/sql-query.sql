@@ -4,10 +4,10 @@ use bac_game;
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
   user_id  int         not null auto_increment,
-  username varchar(40) NOT NULL,
+  username varchar(40) NOT NULL unique key ,
   password varchar(60) NOT NULL
   token varchar (60),
-  PRIMARY KEY (user_id, username)
+  PRIMARY KEY (user_id)
 );
 
 create table game (

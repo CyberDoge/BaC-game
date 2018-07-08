@@ -1,29 +1,25 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.game.dao.UserDao;
 import ru.game.util.DbUtil;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DataBaseTest {
-    private Connection connection;
+class DataBaseTest {
     private UserDao userDao;
 
-    @BeforeAll
+    @BeforeEach
     @DisplayName("init database")
-    public void init() {
-        assertDoesNotThrow(() -> DbUtil.init("/db-test.properties"));
+    void init() {
+        File file = new File("src/test/resources/db-test.properties");
+        assertDoesNotThrow(() -> DbUtil.init(file.getAbsolutePath()));
         userDao = new UserDao();
     }
 
     @Test
     void simpleInsert() {
-        assertNotNull(userDao.createUser("SimpleName", "unhashed password"));
+        assertNotNull(userDao.createUser("NormalTest1", "unhashed password"));
     }
 
     @Test
@@ -39,7 +35,7 @@ public class DataBaseTest {
     void nameMore40length() {
         StringBuilder longName = new StringBuilder();
         for (int i = 0; i < 41 + (int) (Math.random() * 20); i++) {
-            longName.append('a');
+            longName.append('b');
         }
         assertNull(userDao.createUser(longName.toString(), "unhashed password"));
     }
@@ -48,9 +44,10 @@ public class DataBaseTest {
     void passEq60length() {
         StringBuilder longPass = new StringBuilder();
         for (int i = 0; i < 60; i++) {
-            longPass.append('a');
+            longPass.append('c');
         }
-        assertNotNull(userDao.createUser("simpleName", longPass.toString()));
+        assertEquals(longPass.length(), 60);
+        assertNotNull(userDao.createUser("simpleName60lenghtpass", longPass.toString()));
     }
 
     @Test
@@ -59,7 +56,7 @@ public class DataBaseTest {
         for (int i = 0; i < 61 + (int) (Math.random() * 20); i++) {
             longPass.append('a');
         }
-        assertNull(userDao.createUser("simpleName", longPass.toString()));
+        assertNull(userDao.createUser("simpleNamemore50lenghtpass", longPass.toString()));
     }
 
     @Test
@@ -70,13 +67,20 @@ public class DataBaseTest {
 
     @Test
     void addUsersWithEqlPass() {
-        userDao.createUser("username", "password");
-        assertNotNull(userDao.createUser("newUser", "password"));
+        userDao.createUser("usernameEqPass", "password");
+        assertNotNull(userDao.createUser("newUserEqPass", "password"));
     }
 
     @Test
     void addEqlUsers() {
-        userDao.createUser("username", "password");
-        assertNull(userDao.createUser("username", "password"));
+        userDao.createUser("usernameEqUser", "password");
+        assertNull(userDao.createUser("usernameEqUser", "password"));
+    }
+
+
+    @AfterAll
+    static void close() {
+//        userDao = null;
+        assertDoesNotThrow(DbUtil::close);
     }
 }
