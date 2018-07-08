@@ -47,7 +47,9 @@ public class UserServiceImpl implements UserService {
         random.nextBytes(bytes);
         Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
         String token = encoder.encodeToString(bytes);
-        userDao.addCookieToken(username, token);
+        if(!userDao.addCookieToken(username, token)){
+            token = null;
+        }
         return token;
     }
 

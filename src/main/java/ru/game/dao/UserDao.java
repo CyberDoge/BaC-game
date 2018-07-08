@@ -40,7 +40,9 @@ public class UserDao {
         return user;
     }
 
-    public void addCookieToken(String username, String token) {
+    public boolean addCookieToken(String username, String token) {
+        if (username == null || username.isEmpty() || token == null || token.isEmpty()) return false;
+        if(findUserByUsername(username) == null) return false;
         try (var con = DbUtil.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(SAVE_COOKIES)) {
             preparedStatement.setString(1, token);
@@ -48,11 +50,15 @@ public class UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Add cookie-token SQL-exception: ", e);
+            return false;
         }
+        return true;
     }
 
     public User createUser(String username, String password) {
         ResultSet resultSet = null;
+        assert username != null;
+        assert password != null;
         try (var con = DbUtil.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, username);
@@ -76,6 +82,7 @@ public class UserDao {
     }
 
     public void invalidCookieToken(String username) {
+        assert (username != null && !username.isEmpty());
         try (var con = DbUtil.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(SAVE_COOKIES)) {
             preparedStatement.setNull(1, Types.VARCHAR);
