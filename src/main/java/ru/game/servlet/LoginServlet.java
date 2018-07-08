@@ -1,13 +1,13 @@
 package ru.game.servlet;
 
 import ru.game.dao.UserDao;
+import ru.game.dao.UserDaoImpl;
 import ru.game.service.UserService;
 import ru.game.service.UserServiceImpl;
 import ru.game.validator.AuthValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

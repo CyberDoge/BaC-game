@@ -1,7 +1,8 @@
 package ru.game.service;
 
-import ru.game.entity.game.Game;
 import ru.game.dao.StatisticDao;
+import ru.game.entity.game.Game;
+import ru.game.dao.StatisticDaoImp;
 
 import java.util.List;
 import java.util.Map;

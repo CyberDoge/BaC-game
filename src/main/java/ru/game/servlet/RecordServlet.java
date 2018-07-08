@@ -1,6 +1,7 @@
 package ru.game.servlet;
 
 import ru.game.dao.StatisticDao;
+import ru.game.dao.StatisticDaoImp;
 import ru.game.service.StatisticService;
 import ru.game.service.StatisticServiceImpl;
 

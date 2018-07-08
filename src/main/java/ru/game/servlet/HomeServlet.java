@@ -3,6 +3,7 @@ package ru.game.servlet;
 import com.google.gson.Gson;
 import ru.game.dao.StatisticDao;
 import ru.game.dao.UserDao;
+import ru.game.dao.UserDaoImpl;
 import ru.game.service.StatisticService;
 import ru.game.service.StatisticServiceImpl;
 

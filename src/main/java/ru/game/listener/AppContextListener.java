@@ -2,9 +2,9 @@ package ru.game.listener;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.game.dao.GameDao;
-import ru.game.dao.StatisticDao;
-import ru.game.dao.UserDao;
+import ru.game.dao.GameDaoImpl;
+import ru.game.dao.StatisticDaoImp;
+import ru.game.dao.UserDaoImpl;
 import ru.game.util.DbUtil;
 
 import javax.servlet.ServletContextEvent;
@@ -22,9 +22,9 @@ public class AppContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        sce.getServletContext().setAttribute("userDao", new UserDao());
-        sce.getServletContext().setAttribute("gameDao", new GameDao());
-        sce.getServletContext().setAttribute("statisticDao", new StatisticDao());
+        sce.getServletContext().setAttribute("userDao", new UserDaoImpl());
+        sce.getServletContext().setAttribute("gameDao", new GameDaoImpl());
+        sce.getServletContext().setAttribute("statisticDao", new StatisticDaoImp());
         try {
             var url = this.getClass().getClassLoader().getResource("/db.properties").toURI();
             var file = new File(url);

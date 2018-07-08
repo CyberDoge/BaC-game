@@ -1,6 +1,7 @@
 package ru.game.service;
 
 import ru.game.dao.UserDao;
+import ru.game.dao.UserDaoImpl;
 import ru.game.util.PasswordCryptUtil;
 import ru.game.validator.AuthValidator;
 
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void invalidCookies(String username) {
-        userDao.invalidCookieToken(username);
+        userDao.invalidateCookieToken(username);
     }
 
     @Override

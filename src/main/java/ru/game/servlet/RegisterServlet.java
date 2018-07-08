@@ -1,6 +1,7 @@
 package ru.game.servlet;
 
 import ru.game.dao.UserDao;
+import ru.game.dao.UserDaoImpl;
 import ru.game.service.UserService;
 import ru.game.service.UserServiceImpl;
 import ru.game.validator.AuthValidator;
