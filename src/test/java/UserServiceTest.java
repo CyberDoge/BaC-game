@@ -3,7 +3,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.game.service.UserServiceImpl;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Locale;
 
 public class UserServiceTest {
     @Test
@@ -86,7 +93,7 @@ public class UserServiceTest {
     @Test
     void authByCookiesTokenEmpty() {
         var userService = new UserServiceImpl(new UserDaoTest());
-        Assertions.assertNotNull(userService.authByCookies(
+        Assertions.assertNull(userService.authByCookies(
                 new Cookie[]{new Cookie("username", "username"), new Cookie("token", "")}));
     }
 
@@ -107,13 +114,23 @@ public class UserServiceTest {
     }
 
 
-
     @Test
-    void authByCookiesAllNull() {
+    void invalidCookiesNormal() {
         var userService = new UserServiceImpl(new UserDaoTest());
-        Assertions.assertNull(userService.authByCookies(
-                new Cookie[]{new Cookie(null, null), new Cookie(null, null)}));
+        Assertions.assertDoesNotThrow(() -> userService.invalidCookies("username"));
     }
 
 
+    @Test
+    void invalidCookiesEmpty() {
+        var userService = new UserServiceImpl(new UserDaoTest());
+        Assertions.assertThrows(AssertionError.class, () -> userService.invalidCookies(""));
+    }
+
+
+    @Test
+    void invalidCookiesNull() {
+        var userService = new UserServiceImpl(new UserDaoTest());
+        Assertions.assertThrows(AssertionError.class, () -> userService.invalidCookies(null));
+    }
 }

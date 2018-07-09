@@ -57,16 +57,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void invalidCookies(String username) {
+        assert username != null && !username.isEmpty();
         userDao.invalidateCookieToken(username);
     }
 
-    @Override
-    public void sendCookies(String rememberMe, HttpServletResponse resp, String username) {
-        if (rememberMe != null && !rememberMe.isEmpty()) {
-            var usernameCookie = new Cookie("username", username);
-            var tokenCookie = new Cookie("token", saveCookies(username));
-            resp.addCookie(usernameCookie);
-            resp.addCookie(tokenCookie);
-        }
-    }
 }

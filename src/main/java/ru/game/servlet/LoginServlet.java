@@ -8,6 +8,7 @@ import ru.game.validator.AuthValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,7 +64,10 @@ public class LoginServlet extends HttpServlet {
         }
         var messages = AuthValidator.validateLogin(username, password, (UserDaoImpl) getServletContext().getAttribute("userDao"));
         if (messages.isEmpty()) {
-            userService.sendCookies(rememberMe, response, username);
+            if (rememberMe != null && !rememberMe.isEmpty()) {
+                response.addCookie(new Cookie("username", username));
+                response.addCookie(new Cookie("token", userService.saveCookies(username)));
+            }
             auth(request, response, username);
             return;
         }
@@ -78,4 +82,5 @@ public class LoginServlet extends HttpServlet {
         session.setMaxInactiveInterval(60 * 60);
         response.sendRedirect(request.getContextPath() + "user/home");
     }
+
 }
