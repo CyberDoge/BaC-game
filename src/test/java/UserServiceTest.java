@@ -7,10 +7,15 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Locale;
+
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
     @Test
@@ -132,5 +137,32 @@ public class UserServiceTest {
     void invalidCookiesNull() {
         var userService = new UserServiceImpl(new UserDaoTest());
         Assertions.assertThrows(AssertionError.class, () -> userService.invalidCookies(null));
+    }
+
+    @Test
+    void sendCookiesNormal() {
+        var userService = new UserServiceImpl(new UserDaoTest());
+        HttpServletResponseWrapper httpServletResponse = mock(HttpServletResponseWrapper.class);
+        Assertions.assertDoesNotThrow(() -> userService.sendCookies("rememberMe", httpServletResponse, "username"));
+    }
+
+    @Test
+    void sendCookieNull() {
+        var userService = new UserServiceImpl(new UserDaoTest());
+        HttpServletResponseWrapper httpServletResponse = mock(HttpServletResponseWrapper.class);
+        Assertions.assertDoesNotThrow(() -> userService.sendCookies("", httpServletResponse, "username"));
+    }
+
+    @Test
+    void sendCookiesEmpty() {
+        var userService = new UserServiceImpl(new UserDaoTest());
+        HttpServletResponseWrapper httpServletResponse = mock(HttpServletResponseWrapper.class);
+        Assertions.assertDoesNotThrow(() -> userService.sendCookies(null, httpServletResponse, "username"));
+    }
+
+    @Test
+    void sendCookiesNullResp() {
+        var userService = new UserServiceImpl(new UserDaoTest());
+        Assertions.assertThrows(NullPointerException.class, () -> userService.sendCookies("rememberMe", null, "username"));
     }
 }

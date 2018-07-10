@@ -11,4 +11,6 @@ public interface UserService {
     String saveCookies(String username);
 
     void invalidCookies(String username);
+
+    void sendCookies(String checkBox, HttpServletResponse response, String username);
 }

@@ -45,12 +45,7 @@ public class RegisterServlet extends HttpServlet {
         }
         var messages = AuthValidator.validateRegistration(username, password, confirm, (UserDao) getServletContext().getAttribute("userDao"));
         if (messages.isEmpty()) {
-            if (rememberMe != null && !rememberMe.isEmpty()) {
-                var usernameCookie = new Cookie("username", username);
-                var tokenCookie = new Cookie("token", userService.saveCookies(username));
-                resp.addCookie(usernameCookie);
-                resp.addCookie(tokenCookie);
-            }
+            userService.sendCookies(rememberMe, resp, username);
             userService.registerUser(username, password);
             req.getSession().setAttribute("username", username);
             resp.sendRedirect(req.getContextPath() + "user/home");

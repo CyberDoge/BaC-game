@@ -28,7 +28,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("logout") != null) {
             var cookies = request.getCookies();
             for (var c : cookies) {
@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("remember");
@@ -64,10 +64,7 @@ public class LoginServlet extends HttpServlet {
         }
         var messages = AuthValidator.validateLogin(username, password, (UserDaoImpl) getServletContext().getAttribute("userDao"));
         if (messages.isEmpty()) {
-            if (rememberMe != null && !rememberMe.isEmpty()) {
-                response.addCookie(new Cookie("username", username));
-                response.addCookie(new Cookie("token", userService.saveCookies(username)));
-            }
+            userService.sendCookies(rememberMe, response, username);
             auth(request, response, username);
             return;
         }

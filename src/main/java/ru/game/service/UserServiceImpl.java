@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         random.nextBytes(bytes);
         Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
         String token = encoder.encodeToString(bytes);
-        if(!userDao.addCookieToken(username, token)){
+        if (!userDao.addCookieToken(username, token)) {
             token = null;
         }
         return token;
@@ -61,4 +61,15 @@ public class UserServiceImpl implements UserService {
         userDao.invalidateCookieToken(username);
     }
 
+    @Override
+    public void sendCookies(String checkBox, HttpServletResponse response, String username) {
+        if (checkBox != null && !checkBox.isEmpty()) {
+            var usernameCookie = new Cookie("username", username);
+            var tokenCookie = new Cookie("token", saveCookies(username));
+            tokenCookie.setHttpOnly(true);
+            tokenCookie.setSecure(true);
+            response.addCookie(usernameCookie);
+            response.addCookie(tokenCookie);
+        }
+    }
 }
